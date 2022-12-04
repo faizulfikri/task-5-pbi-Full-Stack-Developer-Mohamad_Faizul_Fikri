@@ -11,7 +11,7 @@ import (
 
 const dbUser = "root"
 const dbHost = "localhost"
-const dbName = "data_user_btpn"
+const dbName = "data_users_btpn"
 const dbPort = "3306"
 
 var Db *gorm.DB
@@ -25,7 +25,7 @@ func initDB() *gorm.DB {
 func DatabaseConnection() *gorm.DB {
 	var err error
 
-	dsn := fmt.Sprintf("%s:WowLove@1234@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=local", dbUser, dbHost, dbPort, dbName)
+	dsn := fmt.Sprintf("%s:WowLove@1234@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbHost, dbPort, dbName)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
