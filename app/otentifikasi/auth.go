@@ -1,6 +1,7 @@
 package otentifikasi
 
 import (
+	"errors"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -28,4 +29,56 @@ func GenerateJWT(email string, username string) (tokenStr string, err error) {
 	tokenStr, err = token.SignedString(mySigningKey)
 
 	return
+}
+
+func ValidateToken(tokenSign string) (err error) {
+	mySigningKey := []byte("AllForOne")
+	token, err := jwt.ParseWithClaims(
+		tokenSign,
+		&ClaimJwt{},
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte(mySigningKey), nil
+		},
+	)
+
+	if err != nil {
+		return
+	}
+	claims, ok := token.Claims.(*ClaimJwt)
+	if !ok {
+		err = errors.New("Couldn't parse claim token")
+		return
+	}
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		err = errors.New("Token has expired")
+		return
+	}
+	return
+}
+
+func GetMail(sgnStr string) (email string, err error) {
+	mySigningKey := []byte("AllForOne")
+	token, err := jwt.ParseWithClaims(
+		sgnStr,
+		&ClaimJwt{},
+		func(t *jwt.Token) (interface{}, error) {
+			return []byte(mySigningKey), nil
+		},
+	)
+
+	if err != nil {
+		return
+	}
+
+	claims, ok := token.Claims.(*ClaimJwt)
+	if !ok {
+		err = errors.New("Couldn't parse claim token")
+		return
+	}
+
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		err = errors.New("Token has expired")
+		return
+	}
+	return claims.Email, nil
 }
