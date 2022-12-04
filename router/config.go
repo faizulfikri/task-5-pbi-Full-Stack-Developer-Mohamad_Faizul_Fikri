@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fmt"
+
 	"github.com/faizulfikri/task-5-vix-btpn-Mohamad_Faizul_Fikri/controllers"
 	"github.com/faizulfikri/task-5-vix-btpn-Mohamad_Faizul_Fikri/middlewares"
 	"github.com/gin-gonic/gin"
@@ -12,6 +14,10 @@ func SetUpRouter(db *gorm.DB) *gin.Engine {
 
 	r.Use(func(ctx *gin.Context) {
 		ctx.Set("db", db)
+	})
+
+	r.GET("/", func(ctx *gin.Context) {
+		fmt.Println("Connected")
 	})
 
 	//User
